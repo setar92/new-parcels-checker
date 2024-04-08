@@ -1,9 +1,13 @@
 const postgre = require('../database')
+const telegram = require('../helpers/telegram')
+
+
+
 const bookController = {
     getAll: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from books")
-            res.json({msg: "OK", data: rows})
+            await telegram.sendMessage('Hi, you have new parcel')
+            res.json({msg: "OK", data: 'This is a test message with Serhii'})
         } catch (error) {
             res.json({msg: error.msg})
         }
