@@ -1,73 +1,46 @@
-const postgre = require('../database')
+const postgre = require('../db/database')
 const telegram = require('../helpers/telegram')
+const AuthTokenModel = require('../db/schema/auth')
 
 const bookController = {
     getAll: async(req, res) => {
         try {
             await telegram.sendMessage('Hi, you have new parcel')
             res.json({msg: "OK", data: 'This is a test message with Serhii'})
+            await AuthTokenModel.createTable();
         } catch (error) {
             res.json({msg: error.msg})
         }
     },
-    getById: async(req, res) => {
+    getTocken: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from books where book_id = $1", [req.params.id])
-
-            if (rows[0]) {
-                return res.json({msg: "OK", data: rows})
-            }
-
-            res.status(404).json({msg: "not found"})
+            const tocken = await AuthTokenModel.getAllTokens();
+            console.log(tocken);
+        res.json({msg: "OK", data: tocken})
         } catch (error) {
             res.json({msg: error.msg})
         }
     },
-    create: async(req, res) => {
+    delete: async(req, res) => {
         try {
-            const { name, price } = req.body
-
-            const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
-
-            const { rows } = await postgre.query(sql, [name, price])
-
-            res.json({msg: "OK", data: rows[0]})
+            const deletedTockens = await AuthTokenModel.deleteAllTokens();
+            res.json({msg: "OK", data: deletedTockens})
 
         } catch (error) {
             res.json({msg: error.msg})
         }
     },
-    updateById: async(req, res) => {
+    addTocken: async(req, res) => {
         try {
-            const { name, price } = req.body
-
-            const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
-
-            const { rows } = await postgre.query(sql, [name, price, req.params.id])
-
-            res.json({msg: "OK", data: rows[0]})
+            console.log('ми тут')
+            const newTocken = await AuthTokenModel.addToken('test new tocken')
+            res.json({msg: "OK", data: newTocken})
 
         } catch (error) {
             res.json({msg: error.msg})
         }
     },
-    deleteById: async(req, res) => {
-        try {
-            const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
 
-            const { rows } = await postgre.query(sql, [req.params.id])
-
-            if (rows[0]) {
-                return res.json({msg: "OK", data: rows[0]})
-            }
-
-            return res.status(404).json({msg: "not found"})
-            
-
-        } catch (error) {
-            res.json({msg: error.msg})
-        }
-    }
 }
 
 module.exports = bookController
