@@ -1,6 +1,7 @@
 const postgre = require('../db/database')
 const telegram = require('../helpers/telegram')
 const AuthTokenModel = require('../db/schema/auth')
+const http = require('../http/yard');
 
 const bookController = {
     getAll: async(req, res) => {
@@ -15,7 +16,10 @@ const bookController = {
     getTocken: async(req, res) => {
         try {
             const tocken = await AuthTokenModel.getAllTokens();
-            console.log(tocken);
+            console.log('ми тут')
+            const allParcels = await http.HTTPyard.getAvailableParcels();
+            console.log('тепер ми тут')
+            console.log(allParcels, 'allParcels222');
         res.json({msg: "OK", data: tocken})
         } catch (error) {
             res.json({msg: error.msg})
