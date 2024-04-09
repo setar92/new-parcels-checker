@@ -1,8 +1,6 @@
 const postgre = require('../database')
 const telegram = require('../helpers/telegram')
 
-
-
 const bookController = {
     getAll: async(req, res) => {
         try {
