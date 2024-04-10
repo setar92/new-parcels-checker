@@ -1,7 +1,6 @@
 const axios = require('axios');
 const token = process.env.TOKEN;
 const channel1 = process.env.CHANNEL1;
-const channel2 = process.env.CHANNEL2;
 
 const telegram = {
     sendMessage: async(message) => {

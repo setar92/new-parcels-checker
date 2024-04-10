@@ -30,8 +30,11 @@ const HTTPyard = {
             const headers = {
                 'Authorization': `Bearer ${token}`
               };
+              console.log(`${process.env.YARD_URL}api/auth/otp/check`)
+              console.log(`${process.env.YARD_URL}api/mover/parcels`)
 
             const allParcels = await axios.get(`${process.env.YARD_URL}api/mover/parcels`, {headers});
+              console.log(allParcels, 'allParcels')
             const availableParcelsNumbers = allParcels.data.data.map((parcel => parcel.number))
             return availableParcelsNumbers;
         } catch (error) {
