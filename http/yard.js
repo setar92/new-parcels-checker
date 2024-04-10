@@ -32,9 +32,10 @@ const HTTPyard = {
               };
 
             const allParcels = await axios.get(`${process.env.YARD_URL}api/mover/parcels`, {headers});
-            const availableParcelsNumbers = allParcels.data.data.map((parcel =>parcel.number))
+            const availableParcelsNumbers = allParcels.data.data.map((parcel => parcel.number))
+            return availableParcelsNumbers;
         } catch (error) {
-            res.json({msg: error.msg})
+            throw new Error("Can't get parcels list from YARD api");
         }
     },
 }

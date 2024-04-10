@@ -5,7 +5,7 @@ class AuthTokenModel {
     const query = `
       CREATE TABLE IF NOT EXISTS auth_tokens (
         id SERIAL PRIMARY KEY,
-        token TEXT UNIQUE NOT NULL
+        token TEXT NOT NULL
       );
     `;
     try {
@@ -17,7 +17,7 @@ class AuthTokenModel {
   }
 
   async addToken(token) {
-    const query = `INSERT INTO auth_tokens (token) VALUES ($1) RETURNING id`;
+    const query = `INSERT INTO auth_tokens (token) VALUES ($1)`;
     try {
       const result = await pool.query(query, [token]);
       const newTokenId = result.rows[0].id;
