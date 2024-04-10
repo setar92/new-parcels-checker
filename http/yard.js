@@ -1,6 +1,6 @@
 const axios = require('axios');
 const AuthTokenModel = require('../db/schema/auth')
-
+require('dotenv').config()
 
 const getTocken = async () => {
     const token = await AuthTokenModel.getAllTokens();
@@ -26,15 +26,10 @@ const HTTPyard = {
     getAvailableParcels: async() => {
         try {
             const token = await getTocken();
-
             const headers = {
                 'Authorization': `Bearer ${token}`
-              };
-              console.log(`${process.env.YARD_URL}api/auth/otp/check`)
-              console.log(`${process.env.YARD_URL}api/mover/parcels`)
-
+            };
             const allParcels = await axios.get(`${process.env.YARD_URL}api/mover/parcels`, {headers});
-              console.log(allParcels, 'allParcels')
             const availableParcelsNumbers = allParcels.data.data.map((parcel => parcel.number))
             return availableParcelsNumbers;
         } catch (error) {

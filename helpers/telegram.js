@@ -1,18 +1,17 @@
 const axios = require('axios');
-const token = process.env.TOKEN;
-const channel1 = process.env.CHANNEL1;
 
 const telegram = {
-    sendMessage: async(message) => {
+    sendMessage: async(message, chatsIdArr) => {
         try {
-            const response1 = await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-              chat_id: channel1,
+          const token = process.env.TOKEN;
+          await Promise.all(
+            chatsIdArr.map((chat_id) => {
+              axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+              chat_id,
               text: message
             });
-            // const response2 = await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-            //   chat_id: channel2,
-            //   text: message
-            // });
+            }),
+          );
           } catch (error) {
             console.error('Error sending message:', error.response.data);
           }
