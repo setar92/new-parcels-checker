@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const period = process.env.PERIOD;
 // Scheduling a function call every period minutes
-cron.schedule(`*/${period} * * * *`, async () => {
+const app = cron.schedule(`*/${period} * * * *`, async () => {
     // Time check for the period from 22:00 to 08:00
     const now = new Date();
     const hour = now.getHours();
@@ -18,3 +18,5 @@ cron.schedule(`*/${period} * * * *`, async () => {
 });
 
 console.log('The server is running');
+
+module.exports = app;
