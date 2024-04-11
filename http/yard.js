@@ -7,17 +7,14 @@ const getTocken = async () => {
     if (token[0]) {
         return token[0].token;
     }
-
     const params = {
         code: process.env.SMS_DEV_CODE,
         phone: process.env.MOBILE,
         type: 'person'
     }
-
     const yardResponse = await axios.post(`${process.env.YARD_URL}api/auth/otp/check`, params)
     const newTocken = yardResponse.data.data.access_token
     await AuthTokenModel.addToken(newTocken)
-
     return newTocken
 }
 

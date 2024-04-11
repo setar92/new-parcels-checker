@@ -10,9 +10,9 @@ class ChatIdModel {
     `;
     try {
       await pool.query(query);
-      console.log("Таблиця chatId створена успішно!");
+      console.log("The chatId table was created successfully!");
     } catch (err) {
-      console.error("Помилка при створенні таблиці chatId:", err);
+      console.error("Error creating chatId table:", err);
     }
   }
 
@@ -20,9 +20,9 @@ class ChatIdModel {
     const query = `INSERT INTO chatId (chatId) VALUES ($1)`;
     try {
       await pool.query(query, [chatId]);
-      console.log("chatId успішно додано!");
+      console.log("chatId successfully added!");
     } catch (err) {
-      console.error("Помилка при додаванні chatId:", err);
+      console.error("Error adding chatId:", err);
     }
   }
 
@@ -32,7 +32,7 @@ class ChatIdModel {
       const result = await pool.query(query);
       return result.rows;
     } catch (err) {
-      console.error("Помилка при отриманні усіх chatId:", err);
+      console.error("Error receiving all chatIds:", err);
       return [];
     }
   }
@@ -41,9 +41,9 @@ class ChatIdModel {
     const query = `DELETE FROM chatId WHERE id = $1`;
     try {
       await pool.query(query, [id]);
-      console.log("chatId успішно видалено!");
+      console.log("chatId successfully deleted!");
     } catch (err) {
-      console.error("Помилка при видаленні chatId:", err);
+      console.error("Error deleting chatId:", err);
     }
   }
 }
