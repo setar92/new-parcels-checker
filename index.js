@@ -1,13 +1,20 @@
-const express = require("express")
-const app = express()
-
+const cron = require('node-cron');
+const mainlLogick = require('./helpers/check_new_parcels');
 require('dotenv').config()
 
-app.use(express.json())
 
+const period = process.env.PERIOD;
+// Scheduling a function call every period minutes
+cron.schedule(`*/${period} * * * *`, async () => {
+    // Time check for the period from 22:00 to 08:00
+    const now = new Date();
+    const hour = now.getHours();
 
-const bookRouter = require('./routes/book.router')
+    if (hour >= 8 && hour < 22) {
+        await mainlLogick();
+    }
+}, {
+    timezone: 'Europe/Riga' // Setting the time zone Latvia (Riga)
+});
 
-app.use("/api/v1/books", bookRouter)
-
-app.listen(process.env.PORT, () => console.log("Server is running on port 5000"))
+console.log('The server is running');
