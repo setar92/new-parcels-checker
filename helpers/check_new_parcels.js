@@ -17,6 +17,7 @@ const mainlLogick = async () => {
         const parcelsFromYARD = await HTTPyard.getAvailableParcels();
         const newParcels = findMissingNumbers(parcelsFromYARD, parcelsArrayDB);
         // If there are new parcels, we send notifications in Telegram
+        await ParcelModel.addParcel(77777);
         if (newParcels.length) {
             await Promise.all(newParcels.map((parcelNumber) => ParcelModel.addParcel(parcelNumber)));
             const telegramMessage = `Hello guys, you now have ${parcelsFromYARD.length} parcels ready to ship, ${newParcels.length} of which were created in the last ${process.env.PERIOD} minutes. There are numbers of new parcels ${newParcels.join(' ')}`;
