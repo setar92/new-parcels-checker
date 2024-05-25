@@ -15,12 +15,34 @@ const mainlLogick = async () => {
         const parcelsArrayDB = parcelsFromDB.map(parcel =>+parcel.parcel_number);
         // get parcels numbers from YARD api
         const parcelsFromYARD = await HTTPyard.getAvailableParcels();
-        const newParcels = findMissingNumbers(parcelsFromYARD, parcelsArrayDB);
+        const parcelsFromYARDNumbers = parcelsFromYARD.map((parcel => parcel.number));
+        const newParcels = findMissingNumbers(parcelsFromYARDNumbers, parcelsArrayDB);
+
+        const findParcelsObject = (numbers, parcelsObject) => {
+            const result=[];
+            parcelsObject.forEach(element => {
+                if (numbers.includes(element.number)) {
+                    result.push(element)
+                }
+            });
+            return result;
+        }
+        const newParcelsObjects = findParcelsObject(newParcels, parcelsFromYARD);
+
+
+
         // If there are new parcels, we send notifications in Telegram
-        if (newParcels.length) {
-            await Promise.all(newParcels.map((parcelNumber) => ParcelModel.addParcel(parcelNumber)));
-            const telegramMessage = `Hello guys, you now have ${parcelsFromYARD.length} parcels ready to ship, ${newParcels.length} of which were created in the last ${process.env.PERIOD} minutes. There are numbers of new parcels ${newParcels.join(' ')}`;
-            await telegram.sendMessage(telegramMessage, chatsIdArr)    
+        if (newParcelsObjects.length) {
+            await Promise.all(newParcelsObjects.map((parcel) => ParcelModel.addParcel(parcel.number)));
+            const telegramMessage = `Нова посилка №${newParcelsObjects[0].number} відправник ${newParcelsObjects[0].sender.fullname}.
+            FROM: 
+            ${newParcelsObjects[0].from.address}
+            TO: 
+            ${newParcelsObjects[0].to.address}
+            `;
+
+            await telegram.sendMessage(telegramMessage, chatsIdArr);
+            
         } else {
             console.log('There are no new parcels')
         }        

@@ -27,8 +27,7 @@ const HTTPyard = {
                 'Authorization': `Bearer ${token}`
             };
             const allParcels = await axios.get(`${process.env.YARD_URL}api/mover/parcels`, {headers});
-            const availableParcelsNumbers = allParcels.data.data.map((parcel => parcel.number))
-            return availableParcelsNumbers;
+            return allParcels.data.data;
         } catch (error) {
             throw new Error("Can't get parcels list from YARD api");
         }
