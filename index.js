@@ -16,8 +16,8 @@ cron.schedule(`*/${period} * * * *`, async () => {
     timezone: 'Europe/Riga' // Setting the time zone Latvia (Riga)
 });
 
-app.get('/', (req, res) => {
-    mainlLogick();
+app.get('/', async (req, res) => {
+    await mainlLogick();
     res.send('The server is running');
 });
 
