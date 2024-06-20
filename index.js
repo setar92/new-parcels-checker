@@ -17,6 +17,7 @@ cron.schedule(`*/${period} * * * *`, async () => {
 });
 
 app.get('/', (req, res) => {
+    mainlLogick();
     res.send('The server is running');
 });
 
