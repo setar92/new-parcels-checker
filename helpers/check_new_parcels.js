@@ -9,13 +9,7 @@ const mainlLogick = async () => {
     try {
         // get telegram chats id of recipients
         const chatsId = await ChatIdModel.getAllChatIds();
-
-
-        
-
         const chatsIdArr = chatsId.map(chat =>chat.chatid);
-        // test message
-        await telegram.sendMessage('working', chatsIdArr);
         // get previous parcels numbers from our DB
         const parcelsFromDB = await ParcelModel.getAllParcels();
         const parcelsArrayDB = parcelsFromDB.map(parcel =>+parcel.parcel_number);
